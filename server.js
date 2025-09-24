@@ -24,10 +24,16 @@ wss.on("connection", (ws) => {
   ws.send("Welcome ESP32! 🎉");
 
   ws.on("message", (msg) => {
-    console.log(`📩 Received: ${msg}`);
-    // Echo message back
-    ws.send(`Server got: ${msg}`);
+  console.log(`📩 Received: ${msg}`);
+  
+  // Broadcast to all connected clients
+  wss.clients.forEach(client => {
+    if (client.readyState === client.OPEN) {
+      client.send(`Server got: ${msg}`);
+    }
   });
+});
+
 
   ws.on("close", () => {
     console.log("❌ Client disconnected");
