@@ -20,16 +20,14 @@ const wss = new WebSocketServer({ server });
 // When a client connects
 wss.on("connection", (ws) => {
   console.log("🔌 Client connected");
-
-  ws.send("Welcome ESP32! 🎉");
-
+  
   ws.on("message", (msg) => {
   console.log(`📩 Received: ${msg}`);
   
   // Broadcast to all connected clients
   wss.clients.forEach(client => {
     if (client.readyState === client.OPEN) {
-      client.send(`Server got: ${msg}`);
+      client.send(`${msg}`);
     }
   });
 });
